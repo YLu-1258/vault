@@ -9,7 +9,6 @@ DatabaseManager::DatabaseManager(const char* db_name) {
     db = nullptr;
     if (!db) {
         int rc = sqlite3_open(db_name, &db);
-        std::cout<<rc<<std::endl;
         if (rc != SQLITE_OK) {
             std::cout << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
         } else {
