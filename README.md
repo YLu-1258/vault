@@ -1,8 +1,10 @@
 # Vault
 Personal password manager, summer passion project
 
-## Functionalities:
-Using AES to encrypt and decrypt user passwords securely on a local database.
+## Goals:
+1. Store hashes securely on local database
+2. Implement AES from scratch
+3. User GUI?
 
 ## Compile and build
 1. Clone the project using `git clone https://github.com/YLu-1258/vault.git`
