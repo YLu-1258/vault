@@ -13,7 +13,7 @@ clear:
 	clear
 
 compile: 
-	g++ -o $(main_compiled) $(source) -I$(include_dir) -lsqlite3 
+	g++ -o $(main_compiled) $(source) -I$(include_dir) -lsqlite3 -lcrypto
 
 recompile: | clean clear compile
 

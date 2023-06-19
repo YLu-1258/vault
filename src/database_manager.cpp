@@ -5,12 +5,13 @@
 
 
 DatabaseManager::DatabaseManager(const char* db_name) {
+    std::cout<<"opening database"<<std::endl;
+    db = nullptr;
     if (!db) {
         int rc = sqlite3_open(db_name, &db);
-
+        std::cout<<rc<<std::endl;
         if (rc != SQLITE_OK) {
             std::cout << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
-            db = nullptr;
         } else {
             std::cout << "Database opened successfully at " << db_name << std::endl;
             
