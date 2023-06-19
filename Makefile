@@ -1,19 +1,24 @@
-project_dir := /home/eris29/vscode/vault 
-main_source := $(addsuffix /src/vault.cpp,$(project_dir))
-main_compiled := $(addsuffix vault,$(project_dir))
-include_dir := $(addsuffix /src/include,$(project_dir))
-header_files := $(wildcard $(include_dir)/*.h)
+project_dir := /home/eris29/vscode/vault
+source_dir := $(addsuffix /src,$(project_dir))
+main_source := $(addsuffix /main.cpp,$(source_dir))
+source := $(wildcard $(source_dir)/*.cpp)
+include_dir := $(addsuffix /include,$(source_dir))
+main_compiled := $(addsuffix /main,$(project_dir))
+object_files := $(patsubst $(source_dir)/%.cpp,$(project_dir)/%.o,$(wildcard $(source_dir)/*.cpp))
 
 clean:
-	rm -rf vault_compiled
+	rm -rf $(main_compiled) $(object_files)
 
 clear:
 	clear
 
-compile:
-	g++ $(vault_source) -I $(include_dir) -l sqlite3 -o vault	
+compile: 
+	g++ -o $(main_compiled) $(source) -I$(include_dir) -lsqlite3 
 
 recompile: | clean clear compile
+
+$(project_dir)/%.o: $(source_dir)/%.cpp
+	g++ -c $< -I$(include_dir) -o $@
 
 test:
 	echo $(header_files)
