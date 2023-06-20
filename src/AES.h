@@ -1,19 +1,28 @@
 #ifndef AES_H
 #define AES_H
-#define KEY_LENGTH 32
-#define ROUNDS 14
-#define STATE_SIZE 4
+
+
 #include <openssl/rand.h>
 #include <tuple>
 
-typedef unsigned char byte;
+#define KEY_LENGTH 32
+#define ROUNDS 14
+#define STATE_SIZE 4
+#define Nk 8
+#define Nr 14
+#define Nb 4
+
+typedef unsigned char byte; 
 typedef byte State[4][4];
+typedef byte word[4];
 
 class AES {
     public: // Methods for use
         byte* get_state();
 
         unsigned char* generate_AES_Key();
+
+        word* key_expansion(byte key[4 * Nk]);
         
     private: // Algorithm logic
         byte s_box[16][16] = {
@@ -54,6 +63,8 @@ class AES {
             {0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d}
         };
 
+        byte rcon[10] = {0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1B, 0x36};
+
         byte mix_col[4][4] = {
             {02, 03, 01, 01},
             {01, 02, 03, 01},
@@ -78,6 +89,14 @@ class AES {
         std::tuple<byte, byte> extract_nibble(byte* source);
 
         void add_round_key();
+
+        // word* key_expansion(byte key[4 * Nk]);
+
+        void sub_word(word word);
+
+        void rot_word(word word);
+
+        byte* r_con(int round);
 
         void sub_bytes();
 

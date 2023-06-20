@@ -1,4 +1,5 @@
 #include "AES.h"
+#include <cstring>
 #include <iostream>
 
 byte* AES::get_state() {
@@ -21,8 +22,67 @@ unsigned char* AES::generate_AES_Key() {
 }
 
 void AES::add_round_key(){
-    unsigned char* key = generate_AES_Key()
-    
+
+}
+
+word* AES::key_expansion(byte key[4 * Nk]) {
+    word* round_keys = new word[Nb * (Nr + 1)];
+    word temp;
+
+    int i = 0;
+    while (i < Nk) {
+        round_keys[i][0] = key[4 * i];
+        round_keys[i][1] = key[4 * i + 1];
+        round_keys[i][2] = key[4 * i + 2];
+        round_keys[i][3] = key[4 * i + 3];
+        i++;
+    }
+
+    i = Nk;
+    while (i < Nb * (Nr + 1)) {
+        memcpy(temp, round_keys[i - 1], sizeof(word)); // Copy the previous round key to temp
+        if (i % Nk == 0) {
+            rot_word(temp);
+            sub_word(temp);
+            byte* rconVal = r_con(i / Nk);
+            temp[0] ^= *rconVal;
+        } else if (Nk > 6 && i % Nk == 4) {
+            sub_word(temp);
+        }
+        for (int j = 0; j < 4; j++) {
+            round_keys[i][j] = round_keys[i - Nk][j] ^ temp[j]; // XOR previous round key with temp
+        }
+        i++;
+    }
+
+    return round_keys;
+}
+
+void AES::sub_word(word input) {
+    unsigned char row, column;
+    for (int i = 0; i < Nb; i++) {
+        byte* temp = &input[i];
+        std::tie(row, column) = extract_nibble(temp);
+        input[i] = s_box[row][column];
+    }
+}
+
+void AES::rot_word(word input) {
+    word temp;
+    for (int i = 0; i < Nb; i++) {
+        temp[i] = input[i];
+    }
+    for (int j = 0; j < Nb; j++) {
+        int new_index = calculate_new_left_rotation_index(j-1);
+        input[new_index] = temp[j];
+    }
+
+
+
+}
+
+byte* AES::r_con(int round) {
+    return &(rcon[round]);
 }
 
 void AES::sub_bytes(){
