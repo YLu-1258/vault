@@ -12,14 +12,6 @@ typedef byte State[4][4];
 class AES {
     public: // Methods for use
         byte* get_state();
-
-        void sub_bytes();
-
-        void inv_sub_bytes();
-
-        void shift_rows();
-
-        void inv_shift_rows();
         
     private: // Algorithm logic
         byte s_box[16][16] = {
@@ -74,9 +66,9 @@ class AES {
 
         void add_round_key();
 
-        // void sub_bytes();
+        void sub_bytes();
 
-        // void inv_sub_bytes();
+        void inv_sub_bytes();
         
         void rot_word_left(int row, int rot);
 
@@ -86,9 +78,9 @@ class AES {
 
         int calculate_new_right_rotation_index(int idx);
 
-        // void shift_rows();
+        void shift_rows();
 
-        // void inv_shift_rows();
+        void inv_shift_rows();
 
         
 

@@ -24,14 +24,5 @@ int main(int argc, char* argv[]) {
     // DatabaseManager DB_manager(DB_PATH);
     // DB_manager.init_userpw_table();
     AES AES_manager;
-    std::cout<<"Original State: "<< "\n" <<print_array(AES_manager.get_state())<<std::endl;
-    AES_manager.sub_bytes();
-    std::cout<<"Subbed State: "<< "\n" <<print_array(AES_manager.get_state())<<std::endl;
-    AES_manager.inv_sub_bytes();
-    std::cout<<"Inverse Subbed State: "<< "\n" <<print_array(AES_manager.get_state())<<std::endl;
-    AES_manager.shift_rows();
-    std::cout<<"Shifted Rows"<< "\n" <<print_array(AES_manager.get_state())<<std::endl;
-    AES_manager.inv_shift_rows();
-    std::cout<<"Inverse Shifted Rows"<< "\n" <<print_array(AES_manager.get_state())<<std::endl;
     return 0;
 }
