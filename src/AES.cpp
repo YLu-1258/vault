@@ -37,18 +37,40 @@ void AES::rot_word_left(int row, int rotation){
         word[i] = state[row][i];
     }
     for (int j = 0; j < STATE_SIZE; j++) {
-        int new_index = calculate_new_rotation_index(j-rotation);
+        int new_index = calculate_new_left_rotation_index(j-rotation);
         state[row][new_index] = word[j];
     }
 }
 
-int AES::calculate_new_rotation_index(int idx){
+void AES::rot_word_right(int row, int rotation){
+    // we want to calculate new indexes
+    byte word[STATE_SIZE];
+    for (int i = 0; i < STATE_SIZE; i++) {
+        word[i] = state[row][i];
+    }
+    for (int j = 0; j < STATE_SIZE; j++) {
+        int new_index = calculate_new_right_rotation_index(j+rotation);
+        state[row][new_index] = word[j];
+    }
+}
+
+int AES::calculate_new_left_rotation_index(int idx){
     return (idx < 0) ? 3-(abs(idx)-1) : idx;
+}
+
+int AES::calculate_new_right_rotation_index(int idx){
+    return idx%4;
 }
 
 void AES::shift_rows(){
     for (int i = 0; i < STATE_SIZE; i++) {
         rot_word_left(i, i);
+    }
+}
+
+void AES::inv_shift_rows(){
+    for (int i = 0; i < STATE_SIZE; i++) {
+        rot_word_right(i, i);
     }
 }
 

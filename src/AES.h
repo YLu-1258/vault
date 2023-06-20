@@ -18,6 +18,8 @@ class AES {
         void inv_sub_bytes();
 
         void shift_rows();
+
+        void inv_shift_rows();
         
     private: // Algorithm logic
         byte s_box[16][16] = {
@@ -76,13 +78,19 @@ class AES {
 
         // void inv_sub_bytes();
         
-        void rot_word_left(int row, int i);
+        void rot_word_left(int row, int rot);
 
-        int calculate_new_rotation_index(int idx);
+        void rot_word_right(int row, int rot);
+
+        int calculate_new_left_rotation_index(int idx);
+
+        int calculate_new_right_rotation_index(int idx);
 
         // void shift_rows();
 
-        //
+        // void inv_shift_rows();
+
+        
 
         void mix_columns();
 };

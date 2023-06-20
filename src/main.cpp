@@ -31,5 +31,7 @@ int main(int argc, char* argv[]) {
     std::cout<<"Inverse Subbed State: "<< "\n" <<print_array(AES_manager.get_state())<<std::endl;
     AES_manager.shift_rows();
     std::cout<<"Shifted Rows"<< "\n" <<print_array(AES_manager.get_state())<<std::endl;
+    AES_manager.inv_shift_rows();
+    std::cout<<"Inverse Shifted Rows"<< "\n" <<print_array(AES_manager.get_state())<<std::endl;
     return 0;
 }
