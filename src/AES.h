@@ -12,6 +12,8 @@ typedef byte State[4][4];
 class AES {
     public: // Methods for use
         byte* get_state();
+
+        unsigned char* generate_AES_Key();
         
     private: // Algorithm logic
         byte s_box[16][16] = {
@@ -52,17 +54,28 @@ class AES {
             {0x17, 0x2b, 0x04, 0x7e, 0xba, 0x77, 0xd6, 0x26, 0xe1, 0x69, 0x14, 0x63, 0x55, 0x21, 0x0c, 0x7d}
         };
 
+        byte mix_col[4][4] = {
+            {02, 03, 01, 01},
+            {01, 02, 03, 01},
+            {01, 01, 02, 03}, 
+            {03, 01, 01, 02} 
+        };
+
+        int inv_mix_col[4][4] = {
+            {14, 11, 13, 9},
+            {9, 14, 11, 13},
+            {13, 9, 14, 11}, 
+            {11, 13, 9, 14} 
+        };
 
         byte state[4][4] = {
-            {0x8e, 0x9f, 0x01, 0xc6},
-            {0x4d, 0xdc, 0x01, 0xc6},
-            {0xa1, 0x58, 0x01, 0xc6},
-            {0xbc, 0x9d, 0x01, 0xc6}
+            {0xdb, 0xf2, 0x01, 0xc6},
+            {0x13, 0x0a, 0x01, 0xc6},
+            {0x53, 0x22, 0x01, 0xc6},
+            {0x45, 0x5c, 0x01, 0xc6}
         };
 
         std::tuple<byte, byte> extract_nibble(byte* source);
-
-        unsigned char* generate_AES_Key();
 
         void add_round_key();
 
@@ -82,9 +95,16 @@ class AES {
 
         void inv_shift_rows();
 
+        byte galois_field_multiply(byte a, byte b);
+
+        void mix_column_at_idx(int idx);
         
+        void inv_mix_column_at_idx(int idx);
 
         void mix_columns();
+
+        void inv_mix_columns();
+
 };
 
 #endif
