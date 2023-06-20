@@ -17,8 +17,5 @@ compile:
 
 recompile: | clean clear compile
 
-$(project_dir)/%.o: $(source_dir)/%.cpp
-	g++ -c $< -I$(include_dir) -o $@
-
 test:
 	echo $(header_files)
