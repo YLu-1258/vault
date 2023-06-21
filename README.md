@@ -1,5 +1,5 @@
 # Vault
-Personal password manager, summer passion project
+Personal lightweight password manager, summer passion project
 
 ## Goals:
 1. Store hashes securely on local database
