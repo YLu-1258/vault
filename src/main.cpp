@@ -48,7 +48,10 @@ int main(int argc, char* argv[]) {
     // DatabaseManager DB_manager(DB_PATH);
     // DB_manager.init_userpw_table();
     AES AES_cipher;
+    std::cout<<"Original text: "<<"\n"<<print_array(AES_cipher.get_state())<<std::endl;
     AES_cipher.encrypt();
     std::cout<<"Encrypted Ciphertext: "<<"\n"<<print_array(AES_cipher.get_state())<<std::endl;
+    AES_cipher.decrypt();
+    std::cout<<"Decrypted Ciphertext: "<<"\n"<<print_array(AES_cipher.get_state())<<std::endl;
     return 0;
 }

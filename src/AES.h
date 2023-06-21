@@ -21,6 +21,8 @@ class AES {
         byte* get_state();
 
         void encrypt();
+
+        void decrypt();
         
     private: // Algorithm logic
         byte s_box[16][16] = {
@@ -83,6 +85,8 @@ class AES {
             {0x53, 0x22, 0x01, 0xc6},
             {0x45, 0x5c, 0x01, 0xc6}
         };
+
+        unsigned char* encryption_key;
 
         std::tuple<byte, byte> extract_nibble(byte* source);
 

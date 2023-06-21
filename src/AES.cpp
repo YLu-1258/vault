@@ -7,19 +7,33 @@ byte* AES::get_state() {
 }
 
 void AES::encrypt() {
-    int key_idx = 0;
     word* round_keys = key_expansion(generate_AES_Key());
-    add_round_key(state, 0);
+    add_round_key(round_keys, 0);
     for (int curr_round = 1; curr_round < Nr; curr_round++) {
         sub_bytes();
         shift_rows();
         mix_columns();
         add_round_key(round_keys, curr_round);
-        key_idx = key_idx + 4;
     }
     sub_bytes();
     shift_rows();
     add_round_key(round_keys, 14);
+}
+
+void AES::decrypt() {
+    int key_idx = 0;
+    word* round_keys = key_expansion(encryption_key);
+    add_round_key(round_keys, 14);
+    inv_shift_rows();
+    inv_sub_bytes();
+    for (int curr_round = Nr - 1; curr_round > 0; curr_round--) {
+        add_round_key(round_keys, curr_round);
+        inv_mix_columns();
+        inv_shift_rows();
+        inv_sub_bytes();
+        key_idx = key_idx - 4;
+    }
+    add_round_key(round_keys, 0);
 }
 
 std::tuple<byte, byte> AES::extract_nibble(byte* source) {
@@ -30,11 +44,11 @@ std::tuple<byte, byte> AES::extract_nibble(byte* source) {
 }
 
 unsigned char* AES::generate_AES_Key() {
-    unsigned char* key = new unsigned char[KEY_LENGTH];         // Specify character array for key
-    if (RAND_bytes(key, KEY_LENGTH) != 1) {                     // Try to generate key
+    encryption_key = new unsigned char[KEY_LENGTH];         // Specify character array for key
+    if (RAND_bytes(encryption_key, KEY_LENGTH) != 1) {                     // Try to generate key
         throw std::runtime_error("Failed to generate AES key"); // Key generation failed
     }
-    return key;
+    return encryption_key;
 }
 
 void AES::add_round_key(word* round_keys, int round) {
