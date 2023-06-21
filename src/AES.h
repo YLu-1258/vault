@@ -20,9 +20,7 @@ class AES {
     public: // Methods for use
         byte* get_state();
 
-        unsigned char* generate_AES_Key();
-
-        word* key_expansion(byte key[4 * Nk]);
+        void encrypt();
         
     private: // Algorithm logic
         byte s_box[16][16] = {
@@ -88,9 +86,11 @@ class AES {
 
         std::tuple<byte, byte> extract_nibble(byte* source);
 
-        void add_round_key();
+        unsigned char* generate_AES_Key();
 
-        // word* key_expansion(byte key[4 * Nk]);
+        void add_round_key(word* round_keys, int round);
+
+        word* key_expansion(byte key[4 * Nk]);
 
         void sub_word(word word);
 

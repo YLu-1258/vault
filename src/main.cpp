@@ -21,7 +21,7 @@ std::string print_array(unsigned char* arr) {
     return ss.str();
 }
 
-std::string print_words(word* arr){
+void print_words(word* arr){
     std::stringstream ss;
     ss << std::hex << std::setfill('0');
     for (int i = 0; i < 15; i++) {
@@ -48,10 +48,7 @@ int main(int argc, char* argv[]) {
     // DatabaseManager DB_manager(DB_PATH);
     // DB_manager.init_userpw_table();
     AES AES_cipher;
-    unsigned char* key = AES_cipher.generate_AES_Key();
-    word* expanded_keys = AES_cipher.key_expansion(key);
-    int num_keys = Nb * (Nr + 1);
-    printKeys(expanded_keys, num_keys);
-
+    AES_cipher.encrypt();
+    std::cout<<"Encrypted Ciphertext: "<<"\n"<<print_array(AES_cipher.get_state())<<std::endl;
     return 0;
 }

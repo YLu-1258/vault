@@ -6,6 +6,22 @@ byte* AES::get_state() {
     return &state[0][0];
 }
 
+void AES::encrypt() {
+    int key_idx = 0;
+    word* round_keys = key_expansion(generate_AES_Key());
+    add_round_key(state, 0);
+    for (int curr_round = 1; curr_round < Nr; curr_round++) {
+        sub_bytes();
+        shift_rows();
+        mix_columns();
+        add_round_key(round_keys, curr_round);
+        key_idx = key_idx + 4;
+    }
+    sub_bytes();
+    shift_rows();
+    add_round_key(round_keys, 14);
+}
+
 std::tuple<byte, byte> AES::extract_nibble(byte* source) {
     const int first_nibble = (*source & 0xF0) >> 4;
 	const int second_nibble = (*source & 0xF) >> 0;
@@ -21,8 +37,14 @@ unsigned char* AES::generate_AES_Key() {
     return key;
 }
 
-void AES::add_round_key(){
+void AES::add_round_key(word* round_keys, int round) {
+    int start_index = round * Nb; // Calculate the starting index of the round key
 
+    for (int i = 0; i < Nb; i++) {
+        for (int j = 0; j < 4; j++) {
+            state[i][j] ^= round_keys[start_index + i][j];
+        }
+    }
 }
 
 word* AES::key_expansion(byte key[4 * Nk]) {
@@ -44,8 +66,8 @@ word* AES::key_expansion(byte key[4 * Nk]) {
         if (i % Nk == 0) {
             rot_word(temp);
             sub_word(temp);
-            byte* rconVal = r_con(i / Nk);
-            temp[0] ^= *rconVal;
+            byte* r_con_val = r_con(i / Nk);
+            temp[0] ^= *r_con_val;
         } else if (Nk > 6 && i % Nk == 4) {
             sub_word(temp);
         }
