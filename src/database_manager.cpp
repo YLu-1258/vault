@@ -5,12 +5,12 @@
 
 
 DatabaseManager::DatabaseManager(const char* db_name) {
+    std::cout<<"opening database"<<std::endl;
+    db = nullptr;
     if (!db) {
         int rc = sqlite3_open(db_name, &db);
-
         if (rc != SQLITE_OK) {
             std::cout << "Can't open database: " << sqlite3_errmsg(db) << std::endl;
-            db = nullptr;
         } else {
             std::cout << "Database opened successfully at " << db_name << std::endl;
             
@@ -57,7 +57,7 @@ std::time_t DatabaseManager::get_posix_time(){
 }
 
 bool DatabaseManager::init_userpw_table(){
-    std::string query = "CREATE TABLE user_records (entry_id INTEGER PRIMARY KEY AUTOINCREMENT, service_name TEXT NOT NULL, username TEXT NOT NULL, user_hash TEXT NOT NULL, created_at INT, expiration_date INT, updated_at INT);";
+    std::string query = "CREATE TABLE user_records (entry_id INTEGER PRIMARY KEY AUTOINCREMENT, service_name TEXT NOT NULL, username TEXT NOT NULL, user_hash TEXT NOT NULL, hash_key TEXT NOT NULL, created_at INT, expiration_date INT, updated_at INT);";
     int rc = sqlite3_exec(db, query.c_str(), nullptr, nullptr, nullptr);
     return error_handler(rc);
 }
